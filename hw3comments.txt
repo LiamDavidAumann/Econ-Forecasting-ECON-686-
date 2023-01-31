@@ -1,0 +1,1 @@
+You need to put everything into the R Markdown file and create one document. It looks like you have a second file, but you need to put everything into one document.

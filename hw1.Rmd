@@ -1,0 +1,90 @@
+# Aumann Econ Forecasting Homework 1
+
+## 1) Source Description
+
+-The data is on total job opening (non-farm) in the USA (in the thousands).
+
+-The source of the data is from the [U.S. Bureau of Labor Statistics](https://fred.stlouisfed.org/series/JTSJOL), and is hosted on the FRED database maintained by the Federal Reserve Bank of St. Louis.
+
+-This data is useful as an indicator for finding gaps in the demand for labor and could possible be quite useful as an indicator for labor shortages.
+
+-A forecast could be used to find these future labor shortages and help create effective policy to avoid such shortcomings.
+
+## 2) Job Openings Time Series Plot
+
+```{r echo=FALSE}
+dataset.csv = read.csv("https://raw.githubusercontent.com/LiamDavidAumann/Econ-Forecasting-ECON-686-/main/JobOpenings.csv", header = TRUE)
+names(dataset.csv) = c("Date", "JobOpenings")
+
+openings <- ts(dataset.csv[, "JobOpenings"], start = c(2000, 12), frequency = 12)
+
+plot(openings, main="Job Openings: Non-Farm (in thousands)",
+     ylab="Job Openings",
+     lwd=1.4,
+     cex=1.4)
+```
+
+## 3) Simple Forcasts
+
+### Naive
+This naive forecast was calculated by using the previous observation (in this case July 2022) to forecast for August and September 2022.        
+  
+**Step 1** (August 2022): 11,239
+
+**Step 2** (September 2022): 11,239
+
+### Seasonal Naive
+This seasonal naive forecast was calculated by using the totals from Q4 2021 and Q1 2022 total to forecast for Q4 2022 and Q1 2023.       
+
+-**Step 1** Q4 2022 (total): 33,464
+
+-**Step 2** Q1 2023 (total): 34,482
+
+### Averaging
+This is the monthly average. In this case the average totals since 2001 for August and September respectively were calculated to create the forecast.    
+-**Step 1** (August 2022):4855.7
+
+-**Step 2** (September 2022):4887.3
+
+## 4) Linear Time Trend
+```{r, echo=FALSE}
+library(tstools)
+
+openings.trend <- make.trend(openings)
+fitJob <- tsreg(openings, openings.trend)
+fitJob
+```
+
+-**Step 1** (August 2022):
+
+```{r echo=FALSE}
+#Observation 261 would be August 2022
+2364.88 + (20.25*261)
+```
+
+-**Step 2** (September 2022):
+```{r echo=FALSE}
+#Observation 262 would Septemeber 2022
+2364.88 + (20.25*262)
+```
+
+The regression suggests an upward trend which is expected as job openings have been rising steadily since 2010.       
+This expectation is only compounded by the characteristics of the post-COVID labor market.   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

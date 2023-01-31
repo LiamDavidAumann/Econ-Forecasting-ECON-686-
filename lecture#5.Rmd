@@ -1,0 +1,133 @@
+---
+title: "Lecture#5"
+output: html_document
+---
+
+## R Markdown
+
+FORMATS:
+
+-Word
+-HTML
+-PDF
+-Markdown
+
+Used to export to other formats.
+-use Knit
+
+-orignal
+-Github
+-pandoc
+
+R markdown calls Pandoc (check pandoc for documentation)
+
+# Literate Programming 
+
+- Write a document
+- Have R code inside it
+- Rus R code and inserts output for you
+- Changes are ez pz
+- Complete record of what you have done
+- EZ verification
+- EZ to collab
+- Get distributable documents
+-TLDR:
+(code inside and the computer inserts it)
+
+# Relationship between rainfall and harvest
+
+`#` is a section heading
+
+## Analysis 
+
+### Description
+
+Im working with harvest and rainfall data for the last few years.
+This is a small dataset.
+
+```{r}
+#Three ticks indicate a code chunk {r} indicates it is r code and ``` stops the chunk
+
+rain <- c(30,32,18,24,38,32)
+harvest <- c(150,145,55,70,180,150)
+plot(rain,harvest,ylim = c(0,200),xlim=c(0,50))
+abline(a=-75,b=7)
+
+
+mylm = lm(harvest ~ rain)
+```
+
+What about R code you don't wanna run?
+
+```
+lm(harvest ~ rain)
+```
+or:
+
+The code was: `lm(harvest ~ rain)`
+
+
+```{r, echo=FALSE}
+#echo=FALSE disables the code from being shown and only shows the output
+rain <- c(30,32,18,24,38,32)
+harvest <- c(150,145,55,70,180,150)
+plot(rain,harvest,ylim = c(0,200),xlim=c(0,50))
+abline(a=-75,b=7)
+
+
+mylm = lm(harvest ~ rain)
+```
+
+```{r, eval=FALSE}
+#eval=FALSE only shows the code and not output
+rain <- c(30,32,18,24,38,32)
+harvest <- c(150,145,55,70,180,150)
+plot(rain,harvest,ylim = c(0,200),xlim=c(0,50))
+abline(a=-75,b=7)
+
+
+mylm = lm(harvest ~ rain)
+```
+
+- *italics*
+- **bold**
+- Lists start with `- `
+  - Sublist
+  - Second sublist item
+- Equations $y_{t}$
+  - $\sum_{i=1}^{4}\xi_{i}$
+- Line breaks
+
+This is not
+broken.
+
+This is  
+Broken.
+
+#Estimating the Mean
+
+```{r}
+harvest <- c(150,145,55,70,180,150)
+lm(harvest ~ 1)
+#Give me an intercept and nothing else
+#ctrl+shift+enter
+#runs a chunk
+```
+
+# Steps Ahead
+1) Forecast one step ahead: If data ends in Junly 2022, predict August 2022.
+ 
+2) Forecast one step ahead: If data ends in Junly 2022, predict Septmber 2022.
+
+```{r}
+inflation <- read.csv("https://raw.githubusercontent.com/bachmeil/econ-686-fall-2022/main/inflation.csv", header=TRUE)
+names(inflation) <- c("date","dcpi")
+dcpi <- ts(inflation[, "dcpi"], start = c(1948, 1), frequency = 12)
+library(tstools)
+last(dcpi)
+```
+
+One step (August 2022): 8.5% (with naive approach)
+Two step (Septmeber 2022): 8.5% (with naive still)
+
+

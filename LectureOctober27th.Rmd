@@ -1,0 +1,16 @@
+---
+title: "October27th Lecture"
+output: html_document
+---
+
+| Country | GDP Per Capita |
+|:--------|---------------:|
+|Italy|30,505|
+|France|31,447|
+|Germany|33,181|
+|Spain|33,615|
+|**UK**|**34,319**|
+
+: GDP Per Capita in 2007
+
+

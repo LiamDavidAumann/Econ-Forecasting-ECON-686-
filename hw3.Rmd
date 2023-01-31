@@ -1,0 +1,69 @@
+---
+title: "Total Domestic Construction Spending "
+output: html_document
+---
+
+This variable measures the total amount (in millions of dollars) spent on construction in the USA each month.  
+
+```{r echo=FALSE}
+library(tstools)
+dataset.csv = read.csv("https://raw.githubusercontent.com/LiamDavidAumann/Econ-Forecasting-ECON-686-/main/constructionnotadjusted.csv", header = TRUE)
+names(dataset.csv) = c("Date", "AmountSpent")
+
+construct <- ts(dataset.csv[, "AmountSpent"], start = c(1993, 1), frequency = 12)
+
+plot(construct, main="Total Domestic Construction Spending (unadjusted)",
+     ylab="Total Construction Spending (in millions)",
+     lwd=1.4,
+     cex=1.4)
+```
+
+Although the plot clearly trends upward as time goes forward, each year in the data follows a similar "up/down" pattern.  
+
+An annual seasonality is expected. Most construction happens in the summer and thus it is expected that construction spending will be high in the summer and low in the winter.      
+
+```{r echo=FALSE}
+dum_con <- month.dummy(construct, "Jan")
+trend <- make.trend(construct)
+rhs <- ts.combine(trend, dum_con)
+fit_init <- tsreg(construct, rhs)
+
+construct.dt <- fit_init$resids
+plot(construct.dt, main="Total Domestic Construction Spending (adjusted)",
+     ylab="Adjusted Construction Spending",
+     lwd=1.4,
+     cex=1.4)
+
+```
+  
+## Forecast   
+
+The time trend/seasonal component for September 2022 is: 
+
+```{r echo=FALSE}
+#Coefficients grabbed from fit_init
+28085.8+222.8*(357)+21705.7
+```
+
+The time trend/seasonal component for Ocotber 2022 is: 
+
+```{r echo=FALSE}
+#Coefficients grabbed from fit_init
+28085.8+222.8*(358)+20129.2
+```
+    
+## Best Model   
+
+Selected the best model by using the downward model selection method with the predictors: trend, March, April, May, June, July, August, September, October, November, and December.  
+
+This model was selected with the AIC:
+```{r echo=FALSE}
+preds <- ts.combine(trend, dum_con)
+#stepwise.selection(construct, preds, AIC)
+
+#Fitb found using stepwise.selection() but most of the output makes the html garbled (this is why it is commented out)
+fitb <- tsreg(construct, ts.combine(trend, dum_con[, c("Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")]))
+
+AIC(fitb)
+```
+

@@ -1,0 +1,3 @@
+- Try to make it look more like a document rather than a homework in the future.
+- Explain what you did to get the simple forecasts in problem 3.
+- Is the upward trend what you'd expect and why?
